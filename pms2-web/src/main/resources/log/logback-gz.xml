@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+    <!-- 自定义参数监听 -->
+    <contextListener class="org.springblade.core.log.listener.LoggerStartupListener"/>
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+
+    <!-- 彩色日志依赖的渲染类 -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+    <!-- 彩色日志格式 -->
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <!-- 控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- <pattern>[%date{yyyy-MM-dd HH:mm:ss.SSS}] %X{logthreadId} %-5level %logger{80}.%M\(%F:%L\) - %msg%n</pattern> -->
+            <pattern>${CONSOLE_LOG_PATTERN} </pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 定义日志存储的路径，不要配置相对路径 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>/pmssoft/pmslog/spring-log.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>/pmssoft/pmslog/spring-log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>100MB</maxFileSize>
+            <maxHistory>90</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date %level [%thread] [%logger] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <!-- 生成autoconfig日志文件 -->
+    <appender name="DEBUG_LOG" class="ch.qos.logback.core.FileAppender">
+        <file>pms2-debug.log</file>
+        <append>false</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%n%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{traceId}] [%logger{50}] %n%-5level: %msg%n</pattern>
+        </encoder>
+ 
+    </appender>
+
+
+    <!-- 生成bean日志文件 -->
+    <!-- <appender name="BEAN_LOG" class="ch.qos.logback.core.FileAppender">
+        <file>apimanager-beans.log</file>
+        <append>false</append>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%n%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{traceId}] [%logger{50}] %n%-5level: %msg%n</pattern>
+        </encoder>
+
+    </appender> -->
+
+
+    
+
+
+
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <!-- 自动装配日志 --> 
+    <!-- <logger name="org.springframework.boot.autoconfigure" level="TRACE" addtivity="false">
+        <appender-ref ref="DEBUG_LOG"/>
+     </logger>   -->
+
+
+    <!-- beans日志 -->
+    <!-- <logger name="org.springframework.beans" level="TRACE" addtivity="false">
+        <appender-ref ref="BEAN_LOG"/>
+
+     </logger>   -->
+
+
+   <!-- <logger name="org.springframework.context" level="WARN"/>
+    <logger name="org.springframework.beans" level="WARN"/> -->
+
+        <!-- 减少nacos日志 -->
+    <logger name="com.alibaba.nacos" level="ERROR"/>
+
+
+
+    <!-- 下面这个主要用来调试 mvc 请求信息，不调试时可以注释掉 -->
+  <!-- <logger name="org.springframework.web.servlet" level="TRACE"/> -->
+
+<!-- 下面这个用来调试请求数据与返回数据（request,respose)，包含header信息，不调试时可以级别提高到WARN -->
+ <!-- <logger name="org.springblade.core.log.aspect.RequestLogAspect" level="WARN"/> -->
+ 
+  <!--抑制 public final void org.springframework.dao.support.DaoSupport.afterPropertiesSet() 导致的方法代理失败提示-->  
+  <logger name="org.springframework.aop.framework.CglibAopProxy" level="WARN"/>
+ 
+
+
+ <!--因为默认就是info，所以下面info的都注释掉了，但是不删除掉，便于以后调试-->
+
+
+    <!-- <logger name="net.sf.ehcache" level="INFO"/>
+    <logger name="druid.sql" level="INFO"/> -->
+
+
+    <!-- MyBatis log configure -->
+    <!-- <logger name="com.apache.ibatis" level="INFO"/>
+    <logger name="org.mybatis.spring" level="INFO"/>
+    <logger name="java.sql.Connection" level="INFO"/>
+    <logger name="java.sql.Statement" level="INFO"/>
+    <logger name="java.sql.PreparedStatement" level="INFO"/> -->
+
+    <!-- 减少部分debug日志 -->
+    <!-- <logger name="druid.sql" level="INFO"/>
+    <logger name="org.apache.shiro" level="INFO"/>
+    <logger name="org.mybatis.spring" level="INFO"/>
+    <logger name="org.springframework" level="INFO"/> -->
+     
+    
+    <!-- <logger name="com.baomidou.mybatisplus" level="INFO"/>
+    <logger name="org.apache.ibatis.io" level="INFO"/>
+    <logger name="org.apache.velocity" level="INFO"/>
+    <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="io.undertow" level="INFO"/>
+    <logger name="org.xnio.nio" level="INFO"/>
+    <logger name="org.thymeleaf" level="INFO"/>
+    <logger name="springfox.documentation" level="INFO"/>
+    <logger name="org.hibernate.validator" level="INFO"/>
+    <logger name="com.netflix.loadbalancer" level="INFO"/>
+    <logger name="com.netflix.hystrix" level="INFO"/>
+    <logger name="com.netflix.zuul" level="INFO"/>
+    <logger name="de.codecentric" level="INFO"/> -->
+    <!-- cache INFO -->
+    <!-- <logger name="net.sf.ehcache" level="INFO"/>
+    <logger name="org.springframework.cache" level="INFO"/> -->
+    <!-- cloud -->
+    <!-- <logger name="org.apache.http" level="INFO"/>
+    <logger name="com.netflix.discovery" level="INFO"/>
+    <logger name="com.netflix.eureka" level="INFO"/> -->
+    <!-- 业务日志 -->
+    <!-- <Logger name="org.springblade" level="INFO"/>
+    <Logger name="org.springblade.core.tenant" level="INFO"/>
+    <Logger name="org.springblade.core.version" level="INFO"/> -->
+
+
+
+
+</configuration>

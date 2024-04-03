@@ -1,0 +1,199 @@
+halberd:
+  encryptor:
+    password: TAz8Ms^X/8u0Tt?8Zk
+    algorithm: PBEWithMD5AndDES
+  serverName: server
+  #aspose    jacob
+  officeConversion: aspose
+
+#knife4j配置
+knife4j:
+  #启用
+  enable: true
+  #基础认证
+  basic:
+    enable: true
+    username: blade
+    password: blade
+  #增强配置
+  setting:
+    enableSwaggerModels: true
+    enableDocumentManage: true
+    enableHost: false
+    enableHostText: http://localhost
+    enableRequestCache: true
+    enableFilterMultipartApis: false
+    enableFilterMultipartApiMethodType: POST
+    language: zh-CN
+    enableFooter: false
+    enableFooterCustom: true
+    footerCustomContent: Copyright © 2022 BladeX All Rights Reserved
+
+#swagger公共信息
+swagger:
+  enable: true
+  title: PMS2 接口文档系统
+  description: PMS2 接口文档系统
+  version: 1.0.0
+  license: Powered By Topcheer
+  license-url:
+  terms-of-service-url:
+  project-package: cn.topcheer.pms2
+  contact:
+    name: topcheer
+    email: datecenter@topcheer.cn
+    url:
+  base-packages:
+    - org.springblade
+    - cn.topcheer
+  custom-dockets:
+    - name: 列表
+      base-packages: cn.topcheer.pms2.web.controller.pml
+    - name: 批次-限定条件
+      base-packages: cn.topcheer.pms2.web.controller.plan,cn.topcheer.pms2.web.controller.limit
+
+#web服务端口
+server:
+  port: 9081
+
+#数据源管理时用于密码加密
+# datacenter:
+#   encryptor:
+#     password: TAz8Ms^X/8u0Tt?8Zk
+#     algorithm: PBEWithMD5AndDES
+#数据源配置
+spring:
+  redis:
+    ##redis 单机环境配置
+    host: 192.168.10.158
+    port: 6379
+    #password: HBLYrG8lkKyeVmXj
+    database: 3
+    ssl: false
+    ##redis 集群环境配置
+    #cluster:
+    #  nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003
+    #  commandTimeout: 5000
+  datasource:
+    driver-class-name: dm.jdbc.driver.DmDriver
+    url: jdbc:dm://192.168.40.78:5236?schema=pmsguizhou
+    username: PMSGUIZHOU
+    password: ctv#Ya5K
+  # datasource:
+  #   #动态数据源配置，这块考虑以后能不能和数据源管理合并
+  #   dynamic:
+  #     primary: primary
+  #     strict: false
+  #     datasource:
+  #       primary:
+  #         url: jdbc:mysql://192.168.40.72:3306/data_center?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+  #         username: data_center
+  #         password: db4072fSj4TYHKkTm2!f
+
+    # druid 不同环境差异配置
+    druid:
+      #连接池数量
+      initial-size: 5
+      max-active: 50
+      min-idle: 5
+
+      #连接池测试语句
+      # MySql、PostgreSQL、SqlServer、DaMeng校验
+      validation-query: select 1
+      # Oracle校验
+      #validation-query: select 1 from dual
+
+      #连接池监控管理页面配置
+      stat-view-servlet:
+        enabled: true
+        login-username: blade
+        login-password: 1qaz@WSX
+
+      #连接池监控过滤请求规则
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*'
+        session-stat-enable: true
+        session-stat-max-count: 10
+
+#这块是数据库变更版本管理的，暂时没研究
+  # liquibase:
+  #   enabled: false
+
+#oss默认配置    从oss表中获取，获取不到才从这里取，按照tenantId获取，注意同一个tenantId下不要出现多条
+oss:
+  enabled: false
+  name: minio
+  tenant-mode: true
+  endpoint: http://192.168.10.104:9000
+  access-key: YnTPX1mp3dyR23Xz
+  secret-key: kS2uHOlmAZV4bpkBXepNp0ujhBiQJy7y
+  bucket-name: pms2-teach
+
+#### 下面的先都注释掉了，有需要再加
+
+# #第三方登陆
+# social:
+#   enabled: true
+#   domain: http://127.0.0.1:3888
+
+# #blade配置
+blade:
+#   token:
+#     state: true
+#   #分布式锁配置
+#   lock:
+#     ##是否启用分布式锁
+#     enabled: false
+#     ##redis服务地址
+#     address: redis://192.168.10.158:6379
+#   #本地文件上传
+#   file:
+#     remote-mode: true
+#     upload-domain: http://localhost:8999
+#     remote-path: /usr/share/nginx/html
+  log:
+      request:
+        level: NONE
+  mq:
+    enabled: true
+#   username:     #kafka相关………………
+#   password:
+#   port: 29092
+#   serverHost: 192.168.10.97
+#   servers:                 #集群模式，数组格式 若配置此项则忽略 serverHost、port
+#     - 192.168.10.97:9092
+#     - 192.168.10.97:9093
+#     - 192.168.10.97:9094
+#   accessKey:   #ons ……………………
+#   secretKey:
+#   onsAddr:
+#   context: pms2   #上下文     #通用  ………………………………
+    serverName: server1
+#   className: kafka  #   activemq,onsmq,kafka
+
+# elasticsearch:
+# #  逗号分隔
+#   ips: 192.168.10.96
+# #  如果只有一个，则所有ip使用的端口号恰好相同，否则ips与ports长度必须相同且一一对应。
+#   ports: 9200
+#   maxRetryTimeoutMillis: 60000
+#   socketTimeout: 60000
+#   connectionRequestTimeout: 1000
+#   connectTimeout: 5000
+#   schema: http
+#   batchSize: 2000
+#   scrollKeepAlive: 3600000
+#   knowledgeESIndexName: topcheer-test-data
+
+# #系统日志发送钉钉配置
+# logerror:
+#   enable: false
+#   log-error-url: http://localhost:9081/bladeLogError/countBladeLogError
+#   ding-talk-url: https://oapi.dingtalk.com/robot/send?access_token=6388347706360c1ccc21b673cf1942c8566017d9a02673cba8b46719fa2adc9a
+
+# #限流配置 
+# redis:
+#   rate-limiter:
+#     enabled: true

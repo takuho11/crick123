@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.topcheer.halberd.app.dao.mapper.framework.dataintegration.DataIntegrationFlowDefMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="DataIntegrationFlowDef_ResultMap" type="cn.topcheer.halberd.app.api.framework.entity.dolphin.DataIntegrationFlowDef">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="dol_project_code" property="dol_project_code"/>
+        <result column="dol_process_code" property="dol_process_code"/>
+        <result column="flow_direction" property="flow_direction"/>
+        <result column="ui" property="ui"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="inc_time_param_style" property="incTimeParamStyle"/>
+        <result column="release_stat" property="releaseStat"/>
+    </resultMap>
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <artifactId>pms2-api</artifactId>
+    <name>pms2-api</name>
+    <description>项目接口模块，声明项目业务接口及定义相关数据结构</description>
+    <packaging>jar</packaging>
+
+
+    <parent>
+        <groupId>cn.topcheer</groupId>
+        <version>2.0.0-SNAPSHOT</version>
+        <artifactId>pms2</artifactId>
+    </parent>
+ 
+
+    <dependencies>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-models</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.topcheer</groupId>
+            <artifactId>pms2-common</artifactId>
+        </dependency>
+
+
+    </dependencies>
+
+    <repositories>
+ 
+    </repositories>
+
+    <pluginRepositories>
+
+    </pluginRepositories>
+
+
+
+    <build>
+ 
+    </build>
+</project>

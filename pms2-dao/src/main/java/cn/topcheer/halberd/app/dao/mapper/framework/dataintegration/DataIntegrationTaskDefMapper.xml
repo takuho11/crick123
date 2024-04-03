@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.topcheer.halberd.app.dao.mapper.framework.dataintegration.DataIntegrationTaskDefMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="DataIntegrationTaskDef_ResultMap" type="cn.topcheer.halberd.app.api.framework.entity.dolphin.DataIntegrationTaskDef">
+        <result column="id" property="id"/>
+        <result column="task_name" property="taskName"/>
+        <result column="dol_project_code" property="dolProjectCode"/>
+        <result column="dol_process_code" property="dolProcessCode"/>
+        <result column="dol_process_code" property="dolTaskCode"/>
+        <result column="source_data_type" property="sourceDataType"/>
+        <result column="target_data_type" property="targetDataType"/>
+        <result column="flow_def_id" property="flowDefId"/>
+        <result column="ui" property="ui"/>
+        <result column="version" property="version"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="other_dol_task_codes" property="otherDolTaskCodes"/>
+        <result column="inc" property="inc"/>
+
+    </resultMap>
+
+</mapper>

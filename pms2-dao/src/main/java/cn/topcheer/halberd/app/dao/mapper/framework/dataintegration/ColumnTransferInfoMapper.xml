@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.topcheer.halberd.app.dao.mapper.framework.dataintegration.ColumnTransferInfoMapper">
+
+
+
+
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="ColumnTransferInfo_ResultMapper" type="cn.topcheer.halberd.app.api.framework.entity.dolphin.ColumnTransferInfo">
+        <result column="id" property="id"/>
+        <result column="source_name" property="sourceName"/>
+        <result column="source_chinese_name" property="sourceChineseName"/>
+        <result column="source_type" property="sourceType"/>
+        <result column="source_comment" property="sourceComment"/>
+        <result column="source_length" property="sourceLength"/>
+        <result column="source_numeric_precision" property="sourceNumericPrecision"/>
+        <result column="source_decimal_places" property="sourceDecimalPlaces"/>
+        <result column="task_def_id" property="taskDefId"/>
+        <result column="name" property="name"/>
+        <result column="chinese_name" property="chineseName"/>
+        <result column="type" property="type"/>
+        <result column="dest_length" property="destLength"/>
+        <result column="dest_numeric_precision" property="destNumericPrecision"/>
+        <result column="dest_decimal_places" property="destDecimalPlaces"/>
+        <result column="primary_key" property="primaryKey"/>
+        <result column="nullable" property="nullable"/>
+        <result column="comment" property="comment"/>
+        <result column="memo" property="memo"/>
+        <result column="key_btree" property="keyBtree"/>
+        <result column="create_user" property="createUser"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_user" property="updateUser"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="status" property="status"/>
+        <result column="is_deleted" property="isDeleted"/>
+    </resultMap>
+
+
+
+    <select id="getByTaskDefId" resultMap="ColumnTransferInfo_ResultMapper"
+            parameterType="java.lang.String">
+        SELECT
+        c.source_name,
+        c.source_chinese_name,
+        c.source_type,
+        c.source_comment ,
+        c.source_length ,
+        c.source_decimal_places,
+        c.flow_def_id,
+        c.name,
+        c.chinese_name,
+        c.type ,
+        c.dest_length,
+        c.dest_decimal_places,
+        c.primary_key,
+        c.nullable,
+        c.comment ,
+        c.memo ,
+        c.key_btree
+        FROM
+        column_transfer_info c
+        where c.task_def_id = #{taskDefId}
+    </select>
+
+
+
+</mapper>

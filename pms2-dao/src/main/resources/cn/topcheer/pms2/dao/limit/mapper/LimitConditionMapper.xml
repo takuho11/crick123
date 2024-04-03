@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.topcheer.pms2.dao.limit.mapper.LimitConditionMapper">
+
+    <select id="selectByCon" resultMap="limitConditionVO">
+        select con.*,batch.name as batch_name
+        from limit_condition con left join limit_config config on con.id=config.CONDITION_ID
+        left join pms_planprojectbatch batch on config.batch_id=batch.id
+        <where>
+            <if test="system!=null and system!=''">
+                con.system=#{system}
+            </if>
+            <if test="type!=null and type!=''">
+                and con.type=#{type}
+            </if>
+            <if test="keyWord!=null and keyWord!=''">
+                <bind name="keyWord" value="'%'+keyWord+'%'"/>
+                and (con.name like #{keyWord} or con.code like #{keyWord} or con.content like #{keyWord})
+            </if>
+            order by con.seq
+        </where>
+    </select>
+
+
+    
+    <resultMap id="limitConditionVO" type="cn.topcheer.pms2.api.limit.vo.LimitConditionVO">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="code" property="code"></result>
+        <result column="system" property="system"></result>
+        <result column="type" property="type"></result>
+        <result column="content" property="content"></result>
+        <result column="seq" property="seq"></result>
+        <collection property="batchNameList" javaType="list" ofType="string">
+            <result column="batch_name"></result>
+        </collection>
+    </resultMap>
+
+</mapper>

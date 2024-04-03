@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.topcheer.pms2.dao.sys.mapper.SysGuideMapper">
+
+    <!--根据小批次id获取方向-->
+    <select id="initTopic" resultType="cn.topcheer.pms2.api.sys.vo.SysGuideVO">
+        select t.name,t.memo,t.type,t.seq,t.id as directionid,t.belonglabid,t.belonglab,t.xmzgid,t.xmzg,t.limitnum,e.*,
+        to_char(t.starttime,'yyyy-MM-dd hh:mm:ss') starttime,
+        to_char(t.endtime,'yyyy-MM-dd hh:mm:ss') endtime,
+        to_char(t.relyunitendtime,'yyyy-MM-dd hh:mm:ss') relyunitendtime,
+        to_char(t.recommendedunitendtime,'yyyy-MM-dd hh:mm:ss') recommendedunitendtime
+        from sys_guide t
+        left join sys_guide_config e on e.sourceid = t.id and e.sourcetype = 'direction'
+        <where>
+            t.parentid is null
+            <if test="batchId!=null and batchId!=''">
+                and t.batchid=#{batchId}
+            </if>
+            order by t.seq
+        </where>
+    </select>
+
+
+    <!--根据小批次id和父id获取下一级-->
+    <select id="initData" resultType="cn.topcheer.pms2.api.sys.vo.SysGuideVO">
+        select t.parentid,t.name,t.memo,t.type,t.seq,e.*,
+                t.id as childdirectionid,
+                t.id as projectid,
+                nvl2(e.obligedtarget,'否','是') as isqzzb
+        from sys_guide t
+        left join sys_guide_config e on e.sourceid = t.id
+        <choose>
+            <when test="type='childDirection'"> and e.sourcetype = 'childdirection' </when>
+            <when test="type='project'"> and e.sourcetype = 'project' </when>
+            <otherwise></otherwise>
+        </choose>
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="parentId!=null and parentId!=''">
+                and t.parentid=#{parentId}
+            </if>
+            <if test="batchId!=null and batchId!=''">
+                and t.batchid=#{batchId}
+            </if>
+            order by t.seq
+        </trim>
+    </select>
+
+
+    <!--根据parentId集合获取数据-->
+    <select id="initGuide" resultType="cn.topcheer.pms2.api.sys.vo.SysGuideVO">
+        select t.name,t.memo,t.type,t.seq,
+        t.id as childdirectionid,
+        t.id as zcnrid
+        from sys_guide t
+        where t.parentid in
+        <foreach collection="parentIdList" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <!--根据处室id获取全部处室下官员-->
+    <select id="findXmzgByBelongId" resultType="cn.topcheer.halberd.app.api.framework.entity.sys.SysUser">
+        select t.id,t.name from sys_user t
+            left join sys_identity e on e.userid = t.id
+        <where>
+            <if test="belongId!=null and belongId!=''">
+                e.departmentid = #{belongId}
+            </if>
+        </where>
+    </select>
+
+
+
+    <!--根据关联id和关联业务类型获取配置信息-->
+    <select id="initConfigData" resultType="cn.topcheer.pms2.api.sys.vo.SysGuideVO">
+        select t.*,nvl2(t.obligedtarget,'否','是') as isqzzb
+        from sys_guide_config t
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="batchId!=null and batchId!=''">
+                and t.batchid=#{batchId}
+            </if>
+            <if test="sourceId!=null and sourceId!=''">
+                and t.sourceid=#{sourceId}
+            </if>
+            <if test="sourceType!=null and sourceType!=''">
+                and t.sourcetype=#{sourceType}
+            </if>
+            order by t.seq
+        </trim>
+    </select>
+
+
+
+</mapper>

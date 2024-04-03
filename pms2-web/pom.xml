@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>cn.topcheer</groupId>
+        <version>2.0.0-SNAPSHOT</version>
+        <artifactId>pms2</artifactId>
+    </parent>
+
+    <!-- <groupId>cn.topcheer</groupId>
+    <version>2.0.0-SNAPSHOT</version> -->
+    <artifactId>pms2-web</artifactId>
+    <name>pms2-web</name>
+    <description>项目web服务模块，用于将项目业务模块中的接口以web rest 的方式提供给外部调用</description>
+
+	<packaging>jar</packaging>
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+
+         <dependency>
+            <groupId>cn.topcheer</groupId>
+            <artifactId>pms2-biz</artifactId>
+         </dependency>
+
+
+                 <!-- 数据库驱动 -->
+
+        <!-- 达梦 -->
+        <dependency>
+ 
+            <groupId>com.dameng</groupId>
+            <artifactId>DmJdbcDriver18</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dameng</groupId>
+            <artifactId>DmDialect-for-hibernate5.6</artifactId>
+        </dependency>
+
+        <!-- postgresql -->
+<!--        <dependency>-->
+<!--            <groupId>org.postgresql</groupId>-->
+<!--            <artifactId>postgresql</artifactId>-->
+<!--            <version>42.6.0</version>-->
+<!--        </dependency>-->
+	 <!--
+      <dependency>
+            <groupId>cn.topcheer.tool</groupId>
+            <artifactId>dm-jdbc</artifactId>
+        </dependency>
+     -->
+     <!-- 临时增加 log4j依赖，因为迁入代码里还有很多类里在用，后面应该都要换成slf4j才对 -->
+        <dependency>
+            <groupId>log4j</groupId>
+	        <artifactId>log4j</artifactId>
+		    <version>1.2.17</version>
+	    </dependency>
+
+        <dependency>
+            <groupId>cn.topcheer.zzw</groupId>
+            <artifactId>Inspur</artifactId>
+            <version>1</version>
+        </dependency>
+
+    </dependencies>
+
+
+
+    <build>
+        <plugins>
+            <!-- third-party jar into lib directory -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+
+ 
+                    <execution>
+                        <id>copy-other</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            
+
+
+
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <useUniqueVersions>false</useUniqueVersions>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>cn.topcheer.pms2.Pms2Application</mainClass>
+                        </manifest>
+                        <manifestEntries>
+                            <!-- 假如这个项目可能要引入一些外部资源，但是你打包的时候并不想把
+                            这些资源文件打进包里面，这个时候你必须在这边额外指定一些这些资源
+                            文件的路径，这个位置指定的话，要根据你预期的这些位置去设置，我这边
+                            所有jar都在lib下，资源文件都在config下，lib和config是同级的
+                            同时还需要注意另外一个问题，假如你的pom文件里面配置了
+                            <scope>system</scope>,就是你依赖是你本地的资源，这个时候使用
+                            这个插件，classPath里面是不会添加，所以你得手动把这个依赖添加进
+                            这个地方，用空格隔开就行 -->
+                                                        
+                            <!-- 在Class-Path下添加配置文件的路径 -->
+                            <!-- <Class-Path>../config/.</Class-Path> -->
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+
+    </build>
+</project>

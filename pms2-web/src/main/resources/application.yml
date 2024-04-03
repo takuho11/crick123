@@ -1,0 +1,300 @@
+#服务器配置
+server:
+  undertow:   # 这个是类似于tomcat的web容器，性能比tomcat好
+    threads:
+      # 设置IO线程数, 它主要执行非阻塞的任务,它们会负责多个连接, 默认设置每个CPU核心一个线程
+      io: 16
+      # 阻塞任务线程池, 当执行类似servlet请求阻塞操作, undertow会从这个线程池中取得线程,它的值设置取决于系统的负载
+      worker: 400
+    # 以下的配置会影响buffer,这些buffer会用于服务器连接的IO操作,有点类似netty的池化内存管理
+    buffer-size: 1024
+    # 是否分配的直接内存
+    direct-buffers: true
+
+spring:
+  banner:
+    location: classpath:banner2.txt
+  # 可能是使用bladex框架的原因，profiles在这里配置好像没效果，所以注释掉了，
+  #替代方案是运行处添加jvm参数,例如 : -Dspring.profiles.active=test ，或是 程序添加参数 --spring.profiles.active=test
+  #不加参数 默认profile=dev
+  # profiles:
+  #   active: test
+  datasource:
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    #driver-class-name: org.postgresql.Driver
+    #driver-class-name: oracle.jdbc.OracleDriver
+    #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    #driver-class-name: dm.jdbc.driver.DmDriver
+    druid:
+      validation-query-timeout: 2000
+      max-wait: 60000
+      
+      #连接池有效性测试及空闲释放
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      # 连接池泄漏排查的3个参数
+      # remove-abandoned: true
+      # remove-abandoned-timeout-millis: 300000
+      # logAbandoned: true
+  jpa:
+    open-in-view: true
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        dialect: org.hibernate.dialect.DmDialect
+        allow_update_outside_transaction: true
+        ddl-auto: none
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+#  jackson:
+#     serialization:
+#       fail-on-empty-beans: false
+#     deserialization:
+#       fail-on-unknown-properties: false
+
+# logging:
+#   level:
+#     org.springframework.jdbc.core.JdbcTemplate: DEBUG
+
+
+# mybatis
+mybatis-plus:
+  mapper-locations: classpath:org/springblade/**/mapper/*Mapper.xml,classpath*:cn/topcheer/**/mapper/**/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: org.springblade.**.entity;cn.topcheer.**.entity
+  #typeEnumsPackage: org.springblade.dashboard.entity.enums
+  global-config:
+    # 关闭MP3.0自带的banner
+    banner: false
+    db-config:
+      #主键类型  0:"数据库ID自增", 1:"不操作", 2:"用户输入ID",3:"数字型snowflake", 4:"全局唯一ID UUID", 5:"字符串型snowflake";
+      id-type: ASSIGN_ID
+      #字段策略
+      insert-strategy: NOT_NULL
+      update-strategy: NOT_NULL
+      where-strategy: NOT_NULL
+      #驼峰下划线转换
+      table-underline: true
+      # 逻辑删除配置
+      # 逻辑删除全局值（1表示已删除，这也是Mybatis Plus的默认配置）
+      logic-delete-value: 1
+      # 逻辑未删除全局值（0表示未删除，这也是Mybatis Plus的默认配置）
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    jdbc-type-for-null: 'null'
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+
+
+
+#报表配置
+report:
+  enabled: false
+  database:
+    provider:
+      prefix: topcheer-
+
+
+#blade配置
+blade:
+  #token配置
+  token:
+    #是否有状态
+    state: true
+  #redis序列化方式
+  redis:
+    serializer-type: protostuff
+   # mybatis-plus 是否输出sql日志，先关掉了
+  mybatis-plus:
+    sql-log: false  
+  #接口配置
+  api:
+    #报文加密配置
+    crypto:
+      #启用报文加密配置
+      enabled: false
+      #使用AesUtil.genAesKey()生成
+      aes-key: O2BEeIv399qHQNhD6aGW8R8DEj4bqHXm
+      #使用DesUtil.genDesKey()生成
+      des-key: jMVCBsFGDQr1USHo
+  #jackson配置
+  jackson:
+    #null自动转空值
+    null-to-empty: false
+    #大数字自动转字符串
+    big-num-to-string: true
+    #支持text文本请求,与报文加密同时开启
+    support-text-plain: false
+
+
+  #xss配置
+  xss:
+    enabled: true
+    skip-url:
+      - /doc.html
+      - /topcheer-chat/weixin
+      - /topcheer-desk/notice/submit
+      - /topcheer-workflow/design/model/submit
+      - /topcheer-workflow/design/form/submit
+      - /topcheer-workflow/design/process/startProcess
+      - /topcheer-workflow/design/process/completeTask
+      - /am_datasource/**
+      - /am_api/**
+      - /minidev/miniForm/**
+      - /minidev/miniConnector/submit
+      - /minidev/miniBizDefTabItemField/batchSave
+      - /minidev/miniSdBizDefTabItemField/batchSave
+      - /minidev/miniBizDefTabItem/submit
+      - /minidev/miniSdBizDefTabItem/submit
+      - /minidev/miniBizDefTab/submit
+      - /minidev/miniSdBizDefTab/submit
+      - /topcheer-system/menu/lazy-list
+      - /topcheer-system/menu/submit
+      - /sysapi/**
+      - /pml/**
+      - /RemindRole/**
+      - /RemindConfig/**
+      - /minidev/miniCommon/saveAllTable
+      - /PmsAnnouncement/**
+      - /minidev/miniBizDefConfig/submit
+      - /minidev/miniSdBizDefConfig/submit
+
+  #安全框架配置
+  secure:
+    #接口放行(不登录就能访问的地址)
+    skip-url:
+      - /doc.html
+      - /webjars/**
+      - /swagger-resources
+      - /topcheer-test/**
+      - /article/saveBatch
+      - /article/remove
+      - /article/searchById
+      - /article/searchByUserId
+      - /article/syncArticlesToEs
+      - /article/searchByKeywords
+      - /article/searchByChannels
+      - /article/homePage
+      - /industryTown/queryList
+      - /tag/listWithTree
+      - /ossManagement/upload/byBusinessName
+      - /ws/websocket
+      - /websocket.socket
+      - /test/**
+      - /login/loginCheck
+      - /login/getRegion
+      - /login/getDeptName
+      - /login/getTags
+      - /dataApi/process/**
+      - /bigscreen_api_auth/oauth/token
+      - /enterpriseInfoLog/generate
+      - /optChangeReceiver/test
+      - /dmp/oauth/**
+      - /bladeLogError/**
+      - /sysapi/**
+      - /topcheer-auth/oauth/**
+      - /topcheer-system/tenant/info
+      - /topcheer-resource/oss/endpoint/downloadFileByAttachId
+      - /topcheer-log/weblog/write
+      - /OfficeHall/**
+      - /Register/**
+      - /common/getDropdownListOpen
+      - /OfficeHall/getPlanprojetData.do
+      - /topcheer-system/area/tree
+      - /oss/viewFile
+      - /ZwwOauth/**
+      - /PmsAnnouncement/**
+      # start:创新地图资源相关接口
+      - /MapClob/getData
+      - /MapResource/saveClob
+      # end:创新地图资源相关接口
+
+    # 登录后才能访问的地址(这块和auth配置不能重复)，这是expression值为"hasAuth()"的缩写形式
+    has-auth-url:
+      - /topcheer-system/dict-biz/dict-tree
+      - /topcheer-system/menu/routes 
+      - /topcheer-system/dict/dict-tree
+      - /common/enumParams
+      - /topcheer-system/dict/dictionary
+      - /topcheer-system/menu/buttons
+      - /**
+    #授权认证配置
+    auth:
+      - method: ALL
+        pattern: /topcheer-chat/weixin/**
+        expression: "hasAuth()"
+      - method: POST
+        pattern: /topcheer-desk/dashboard/upload
+        expression: "hasTimeAuth(9, 17)"
+      - method: POST
+        pattern: /topcheer-desk/dashboard/submit
+        expression: "hasAnyRole('administrator', 'admin', 'user')"
+      # - method: ALL
+      #   pattern: /**
+      #   expression: "hasRole('administrator')||permissionAll()"
+
+    #基础认证配置
+    basic:
+      - method: ALL
+        pattern: /topcheer-desk/dashboard/info
+        username: "blade"
+        password: "blade"
+    #动态签名认证配置
+    sign:
+      - method: ALL
+        pattern: /topcheer-desk/dashboard/sign
+        crypto: "sha1"
+    #多终端认证配置
+    client:
+      - client-id: sword
+        path-patterns:
+          - /topcheer-sword/**
+      - client-id: saber
+        path-patterns:
+          - /topcheer-saber/**
+  #多租户配置
+  tenant:
+    #多租户增强
+    enhance: true
+    #多租户授权保护
+    license: false
+    #动态数据源功能
+    dynamic-datasource: true
+    #动态数据源全局扫描
+    dynamic-global: false
+    #多租户字段名
+    column: tenant_id
+    #排除多租户逻辑
+    exclude-tables:
+      - sf_user
+
+#flowable配置
+flowable:
+  activity-font-name: \u5B8B\u4F53
+  label-font-name: \u5B8B\u4F53
+  annotation-font-name: \u5B8B\u4F53
+  check-process-definitions: false
+  database-schema-update: true # 表自动更新
+  async-executor-activate: false # 关闭定时任务
+  app:
+    enabled: false
+  cmmn:
+    enabled: false
+  idm:
+    enabled: false
+  dmn:
+    enabled: false
+  form:
+    enabled: false
+  content:
+    enabled: false
+  eventregistry:
+    enabled: false
+  custom-mybatis-x-m-l-mappers:
+    - org/springblade/plugin/workflow/process/mapper/WfProcessDefinition.xml

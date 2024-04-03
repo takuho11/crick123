@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.topcheer.pms2.dao.plan.mapper.PmsPlanprojectMapper">
+
+    <select id="selectByCon" resultType="java.util.Map">
+        select bigbatch.SYSTEM,BATCH.ANNUALLY,BIGBATCH.ID as bigbatchid,BIGBATCH.PROJECTNAME as bigbatchname,BATCH.id as batchid,batch.NAME as batchname
+        from pms_planproject bigbatch
+        inner join pms_planprojectbatch batch on BIGBATCH.id=BATCH.PLANPROJECTID
+        <where>
+            <if test="system!=null and system!=''">
+                BIGBATCH.system=#{system}
+            </if>
+            <if test="annually!=null and annually!=''">
+                and BATCH.annually=#{annually}
+            </if>
+            <if test="bigBatchId!=null and bigBatchId!=''">
+                and BIGBATCH.id=#{bigBatchId}
+            </if>
+        </where>
+    </select>
+
+</mapper>

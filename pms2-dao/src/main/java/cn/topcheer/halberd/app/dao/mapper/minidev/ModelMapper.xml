@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.topcheer.halberd.app.dao.mapper.minidev.ModelMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="modelResultMap" type="cn.topcheer.halberd.app.api.minidev.entity.Model">
+        <id column="id" property="id" />
+        <result column="datasource_id" property="datasourceId" />
+        <result column="model_name" property="modelName" />
+        <result column="model_code" property="modelCode" />
+        <result column="model_table" property="modelTable" />
+        <result column="model_class" property="modelClass" />
+        <result column="model_remark" property="modelRemark" />
+        <result column="api_type" property="apiType" />
+        <result column="insert_api" property="insertApi" />
+        <result column="update_api" property="updateApi" />
+        <result column="delete_api" property="deleteApi" />
+        <result column="select_api" property="selectApi" />
+ 
+    </resultMap>
+
+
+    <select id="selectModelPage" resultMap="modelResultMap"> select * from sf_model where
+        is_deleted = 0 </select>
+
+</mapper>

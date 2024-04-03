@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.topcheer.pms2.dao.sys.mapper.SysParamsMapper">
+
+    <select id="selectByCon" resultMap="sysParamsVO">
+        select a.*,
+               b.id as c_id,b.parentid as c_parentid,b.name as c_name,b.value as c_value,
+               b.applytype as c_applytype,b.code as c_code,b.memo as c_memo,b.seq as c_seq,b.intvalue as c_intvalue
+        from sys_params a left join sys_params b on a.id=b.PARENTID
+        where a.parentid is null
+        <if test="applyType!=null and applyType!=''">
+            and a.applytype=#{applyType}
+        </if>
+        order by b.seq
+    </select>
+
+    <resultMap id="sysParamsVO" type="cn.topcheer.pms2.api.sys.vo.SysParamsVO">
+        <id column="id" property="id"></id>
+        <result column="parentid" property="parentid"></result>
+        <result column="name" property="name"></result>
+        <result column="value" property="value"></result>
+        <result column="applytype" property="applytype"></result>
+        <result column="code" property="code"></result>
+        <result column="memo" property="memo"></result>
+        <result column="seq" property="seq"></result>
+        <result column="intvalue" property="intvalue"></result>
+        <collection property="childrensList" javaType="list" ofType="cn.topcheer.pms2.api.sys.SysParams">
+            <id column="c_id" property="id"></id>
+            <result column="c_parentid" property="parentid"></result>
+            <result column="c_name" property="name"></result>
+            <result column="c_value" property="value"></result>
+            <result column="c_applytype" property="applytype"></result>
+            <result column="c_code" property="code"></result>
+            <result column="c_memo" property="memo"></result>
+            <result column="c_seq" property="seq"></result>
+            <result column="c_intvalue" property="intvalue"></result>
+        </collection>
+    </resultMap>
+
+    <select id="selectByParentvalue" resultMap="parentvalueVO">
+        select a.value,
+        b.name as c_name,decode(b.intvalue,null,b.value,b.intvalue) as c_value,
+        b.code as c_code,b.intvalue as c_intvalue
+        from sys_params a left join sys_params b on a.id=b.PARENTID
+        where a.parentid is null and a.value is not null
+        <if test="selectInitNameMap!=null and selectInitNameMap.size()>0">
+        and a.value in
+            <foreach collection="selectInitNameMap" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        order by b.seq
+    </select>
+
+    <resultMap id="parentvalueVO" type="cn.topcheer.pms2.api.sys.vo.SysParamsVO">
+        <result column="value" property="value"></result>
+        <collection property="childrensList" javaType="list" ofType="cn.topcheer.pms2.api.sys.SysParams">
+            <result column="c_name" property="name"></result>
+            <result column="c_value" property="value"></result>
+            <result column="c_code" property="code"></result>
+            <result column="c_intvalue" property="intvalue"></result>
+        </collection>
+    </resultMap>
+
+</mapper>

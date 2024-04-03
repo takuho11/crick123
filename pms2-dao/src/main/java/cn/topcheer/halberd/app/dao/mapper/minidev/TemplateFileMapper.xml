@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.topcheer.halberd.app.dao.mapper.minidev.TemplateFileMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="templateFileResultMap" type="cn.topcheer.halberd.app.api.minidev.entity.TemplateFile">
+        <id column="id" property="id"/>
+        <result column="file_name" property="fileName"/>
+        <result column="file_code" property="fileCode"/>
+        <result column="file_path" property="filePath"/>
+        <result column="file_remark" property="fileRemark"/>
+        <result column="template_content" property="templateContent"/>
+        <result column="file_category" property="fileCategory"/>
+        <result column="template_engine" property="templateEngine"/>
+    </resultMap>
+
+</mapper>
